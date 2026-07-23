@@ -387,7 +387,9 @@ footer {
 
 @media (max-width: 760px) {
   .header {
-    position: static;
+    position: sticky;
+    top: 0;
+    left: auto;
     display: flex;
     height: auto;
     flex-direction: column;
@@ -396,6 +398,9 @@ footer {
     padding-top: 22px;
     padding-bottom: 16px;
     transform: none;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255, 248, 244, 0.96);
+    backdrop-filter: blur(8px);
   }
 
   nav {
@@ -413,8 +418,16 @@ footer {
   .hero {
     gap: 40px;
     min-height: auto;
-    padding-top: 34px;
+    padding-top: 18px;
     padding-bottom: 52px;
+  }
+
+  .hero > div:first-child {
+    order: 2;
+  }
+
+  .hero > div:last-child {
+    order: 1;
   }
 
   h1 {
