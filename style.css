@@ -25,6 +25,8 @@ body {
   background: var(--cream);
   color: var(--navy);
   font-family: Arial, "Apple SD Gothic Neo", sans-serif;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 a {
@@ -128,6 +130,7 @@ h2 {
   display: inline-block;
   margin-top: 24px;
   padding: 17px 22px;
+  border-radius: 999px;
   background: var(--deep);
   box-shadow: 6px 6px 0 var(--coral);
   color: white;
@@ -137,8 +140,8 @@ h2 {
 
 .hero-card {
   padding: 28px;
-  transform: rotate(1.5deg);
   border: 1px solid rgba(77, 82, 108, 0.24);
+  border-radius: 26px;
   background: rgba(255, 255, 255, 0.82);
   box-shadow: 10px 10px 0 rgba(222, 218, 244, 0.8);
   backdrop-filter: blur(4px);
@@ -166,7 +169,7 @@ h2 {
 
 .chart i {
   width: 100%;
-  border-radius: 4px 4px 0 0;
+  border-radius: 999px 999px 4px 4px;
   background: var(--deep);
 }
 
@@ -206,6 +209,7 @@ h2 {
 .cards article {
   padding: 32px;
   border-right: 1px solid var(--line);
+  border-radius: 20px;
 }
 
 .cards article:last-child {
@@ -259,6 +263,7 @@ h2 {
   align-items: center;
   padding: 30px 10px;
   border-bottom: 1px solid var(--line);
+  border-radius: 18px;
 }
 
 .project-list article > span {
