@@ -21,12 +21,27 @@ html {
 }
 
 body {
+  animation: fadeUp 0.9s ease both;
+}
+
+body {
   margin: 0;
   background: var(--cream);
   color: var(--navy);
   font-family: Arial, "Apple SD Gothic Neo", sans-serif;
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 a {
@@ -136,6 +151,13 @@ h2 {
   color: white;
   font-size: 14px;
   font-weight: 800;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+  background: #7b81a3;
+  box-shadow: 7px 8px 0 var(--coral);
 }
 
 .hero-card {
@@ -145,6 +167,7 @@ h2 {
   background: rgba(255, 255, 255, 0.82);
   box-shadow: 10px 10px 0 rgba(222, 218, 244, 0.8);
   backdrop-filter: blur(4px);
+  animation: floatCard 5s ease-in-out infinite;
 }
 
 .hero-card strong {
@@ -183,6 +206,9 @@ h2 {
 .section {
   padding-top: 105px;
   padding-bottom: 105px;
+  opacity: 0;
+  transform: translateY(22px);
+  animation: revealSection 0.9s ease forwards;
 }
 
 .about {
@@ -210,6 +236,12 @@ h2 {
   padding: 32px;
   border-right: 1px solid var(--line);
   border-radius: 20px;
+  transition: transform 0.22s ease, background 0.22s ease;
+}
+
+.cards article:hover {
+  transform: scale(1.012);
+  background: rgba(255, 255, 255, 0.72);
 }
 
 .cards article:last-child {
@@ -264,6 +296,12 @@ h2 {
   padding: 30px 10px;
   border-bottom: 1px solid var(--line);
   border-radius: 18px;
+  transition: transform 0.22s ease, background 0.22s ease;
+}
+
+.project-list article:hover {
+  transform: scale(1.006);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .project-list article > span {
@@ -327,6 +365,26 @@ footer {
 }
 
 /* 2. 화면이 좁아지면 자동으로 한 줄 배치로 바뀝니다. */
+@keyframes floatCard {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes revealSection {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 760px) {
   .header {
     position: static;
