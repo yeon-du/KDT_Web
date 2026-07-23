@@ -25,7 +25,7 @@
         <div>
           <p class="label">FINANCIAL ENGINEERING · DATA · WEB</p>
           <h1>
-            금융공학을 통해<br />
+            <span class="typing-text" id="typingText" data-text="금융공학을 통해">금융공학을 통해</span><br />
             <em>가치를 만드는</em><br />
             데이터 기반 인재입니다.
           </h1>
@@ -157,7 +157,23 @@
       <a href="#home">맨 위로 ↑</a>
     </footer>
     <script>
-      window.scrollTo(0, 0);
+      const typingText = document.getElementById('typingText');
+      const text = typingText.dataset.text;
+      let index = 0;
+
+      function typeText() {
+        typingText.textContent = text.slice(0, index);
+        index += 1;
+
+        if (index <= text.length) {
+          setTimeout(typeText, 70);
+        }
+      }
+
+      window.addEventListener('load', function () {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+        setTimeout(typeText, 280);
+      });
     </script>
   </body>
 </html>
