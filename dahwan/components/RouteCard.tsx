@@ -38,7 +38,7 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
 
   return (
     <motion.article
-      layout
+      layout="position"
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className={`relative rounded-[20px] border-2 bg-paper shadow-soft sm:border ${
