@@ -23,7 +23,7 @@ export const MOOD_RANGES: { key: MoodRange; label: string }[] = [
   { key: "7d", label: "일주일" },
 ];
 
-const RANGE_CONFIG: Record<MoodRange, { count: number; spanMinutes: number }> = {
+export const RANGE_CONFIG: Record<MoodRange, { count: number; spanMinutes: number }> = {
   live: { count: 5, spanMinutes: 180 },
   "1d": { count: 8, spanMinutes: 60 * 24 },
   "7d": { count: 12, spanMinutes: 60 * 24 * 7 },

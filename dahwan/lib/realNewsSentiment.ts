@@ -1,20 +1,6 @@
 import { CurrencyCode } from "./types";
-import { MoodRange, NewsSentimentItem, NewsSentimentSummary, NewsStance, moodLabel } from "./newsSentiment";
+import { MoodRange, NewsSentimentItem, NewsSentimentSummary, NewsStance, RANGE_CONFIG, moodLabel } from "./newsSentiment";
 
-// Real headlines via Google News RSS search, proxied through rss2json.com
-// (free, keyless) purely to add the CORS headers Google's own RSS endpoint
-// doesn't send — a static export has no backend to do that server-side, so
-// this mirrors the same "free, keyless, CORS-enabled public endpoint"
-// pattern lib/realRateTrend.ts already uses for Frankfurter. If rss2json's
-// keyless tier is ever rate-limited or unreachable, this just returns null
-// and the caller falls back to the mock generator — same graceful-fallback
-// shape as the rate trend fetch.
-//
-// Real articles don't arrive pre-labeled with a stance/score the way the
-// mock pool does, and there's no free sentiment-classification API
-// available from client-side JS alone. `classify()` below is a plain
-// keyword heuristic on the Korean headline text — good enough for a
-// "참고 지표" as the app already bills this, not a claim of real NLP.
 const RSS2JSON_BASE = "https://api.rss2json.com/v1/api.json";
 
 const CURRENCY_QUERY: Record<CurrencyCode, string> = {
@@ -28,9 +14,6 @@ const CURRENCY_QUERY: Record<CurrencyCode, string> = {
 };
 
 const WINDOW_MS: Record<MoodRange, number> = {
-  // Real FX headlines don't arrive on a fixed cadence — widened past a
-  // literal "few hours" so 실시간 usually has enough real volume to show
-  // more than 1-2 items.
   live: 6 * 60 * 60_000,
   "1d": 24 * 60 * 60_000,
   "7d": 7 * 24 * 60 * 60_000,
@@ -76,17 +59,13 @@ export async function fetchRealNewsSentiment(range: MoodRange, currency: Currenc
     const data = (await res.json()) as Rss2JsonResponse;
     if (data.status !== "ok" || !data.items?.length) return null;
 
+    const sorted = [...data.items].sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
     const cutoff = Date.now() - WINDOW_MS[range];
-    const inWindow = data.items.filter((item) => new Date(item.pubDate).getTime() >= cutoff);
-    // A quiet news period can leave the window with very few real items —
-    // falling back to "just the most recent ones" beats showing an
-    // almost-empty card.
-    const pool = inWindow.length >= 4 ? inWindow : data.items;
+    const inWindow = sorted.filter((item) => new Date(item.pubDate).getTime() >= cutoff);
+    const pool = inWindow.length > 0 ? inWindow : sorted;
+    const count = RANGE_CONFIG[range].count;
 
-    const items: NewsSentimentItem[] = pool.slice(0, 12).map((raw, idx) => {
-      // Google News RSS titles are formatted "headline - source"; split on
-      // the *last* " - " so a hyphen inside the headline itself isn't
-      // mistaken for the separator.
+    const items: NewsSentimentItem[] = pool.slice(0, count).map((raw, idx) => {
       const cut = raw.title.lastIndexOf(" - ");
       const headline = cut > 0 ? raw.title.slice(0, cut) : raw.title;
       const source = cut > 0 ? raw.title.slice(cut + 3) : "Google 뉴스";
