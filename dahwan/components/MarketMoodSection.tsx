@@ -53,7 +53,7 @@ export default function MarketMoodSection({
 
   return (
     <section aria-label="시장 동향" className="px-6 sm:px-10 lg:px-[clamp(24px,7.5vw,120px)]">
-      <div className="mx-auto max-w-[1140px] rounded-3xl border-2 border-line bg-paper p-6 sm:border sm:p-7">
+      <div className="mx-auto max-w-[1140px] rounded-3xl border-2 border-line bg-paper p-4 sm:border sm:p-7">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold text-coral">Prototype · 실험 기능</p>
@@ -149,7 +149,7 @@ export default function MarketMoodSection({
                   데이터 연동 전 프로토타입 단계로 모의 데이터를 사용하고 있습니다.
                 </p>
               </div>
-              <div className="max-h-[280px] overflow-y-auto pr-1">
+              <div className="max-h-[280px] overflow-y-auto">
                 <span className="mb-2 block text-[11px] font-semibold text-muted">
                   {CURRENCY_SHORT_LABEL[targetCurrency] ?? targetCurrency} 관련 최근 헤드라인
                 </span>
