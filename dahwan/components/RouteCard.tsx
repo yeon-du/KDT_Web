@@ -79,66 +79,74 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           <strong className="ml-auto font-mono text-[15px] font-bold text-muted">#{rank}</strong>
         </div>
 
-        {providerPicker && (
-          <div className="-mx-1 mt-4 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label={providerPicker.ariaLabel ?? "옵션 선택"}>
-            {providerPicker.options.map((opt) => (
-              <button
-                key={opt.id}
-                type="button"
-                onClick={() => providerPicker.onChange(opt.id)}
-                aria-pressed={providerPicker.selected === opt.id}
-                className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                  providerPicker.selected === opt.id
-                    ? "bg-coral text-forest"
-                    : "border border-line text-muted hover:border-coral/50 hover:text-ink"
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {coinPicker && (
-          <div className="mt-4 space-y-1.5">
-            <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label="코인 선택">
-              {(["auto", "USDT", "USDC"] as const).map((m) => (
+        {/* Only remittance/USDT get a picker — bank has neither. Without a
+            reserved slot, that made the bank card ~40-70px shorter than
+            its siblings on mobile, where cards stack in one column and
+            grid's row-stretch (which fixes this on desktop) doesn't apply.
+            This wrapper always renders, so the bank card reserves the same
+            empty space its siblings fill with actual pills. */}
+        <div className="mt-4 min-h-[34px] sm:min-h-[38px]">
+          {providerPicker && (
+            <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label={providerPicker.ariaLabel ?? "옵션 선택"}>
+              {providerPicker.options.map((opt) => (
                 <button
-                  key={m}
+                  key={opt.id}
                   type="button"
-                  onClick={() => coinPicker.onModeChange(m)}
-                  aria-pressed={coinPicker.mode === m}
+                  onClick={() => providerPicker.onChange(opt.id)}
+                  aria-pressed={providerPicker.selected === opt.id}
                   className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                    coinPicker.mode === m
+                    providerPicker.selected === opt.id
                       ? "bg-coral text-forest"
                       : "border border-line text-muted hover:border-coral/50 hover:text-ink"
                   }`}
                 >
-                  {m === "auto" ? "기본 시뮬레이션" : m}
+                  {opt.label}
                 </button>
               ))}
             </div>
-            {coinPicker.mode !== "auto" && (
-              <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label="네트워크 선택">
-                {coinPicker.networkOptions.map((opt) => (
+          )}
+
+          {coinPicker && (
+            <div className="space-y-1.5">
+              <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label="코인 선택">
+                {(["auto", "USDT", "USDC"] as const).map((m) => (
                   <button
-                    key={opt.id}
+                    key={m}
                     type="button"
-                    onClick={() => coinPicker.onNetworkChange(opt.id)}
-                    aria-pressed={coinPicker.network === opt.id}
+                    onClick={() => coinPicker.onModeChange(m)}
+                    aria-pressed={coinPicker.mode === m}
                     className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
-                      coinPicker.network === opt.id
-                        ? "border border-coral/60 bg-coral/15 text-coral"
+                      coinPicker.mode === m
+                        ? "bg-coral text-forest"
                         : "border border-line text-muted hover:border-coral/50 hover:text-ink"
                     }`}
                   >
-                    {opt.label}
+                    {m === "auto" ? "기본 시뮬레이션" : m}
                   </button>
                 ))}
               </div>
-            )}
-          </div>
-        )}
+              {coinPicker.mode !== "auto" && (
+                <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1" role="group" aria-label="네트워크 선택">
+                  {coinPicker.networkOptions.map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => coinPicker.onNetworkChange(opt.id)}
+                      aria-pressed={coinPicker.network === opt.id}
+                      className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-[11px] font-semibold transition-colors ${
+                        coinPicker.network === opt.id
+                          ? "border border-coral/60 bg-coral/15 text-coral"
+                          : "border border-line text-muted hover:border-coral/50 hover:text-ink"
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
         <div className="border-b border-line py-4 sm:py-6">
           <span className="block text-[11px] text-muted">예상 수령액</span>
