@@ -49,7 +49,7 @@ export default function DataRail({ rates, status, fallbackUsdKrw, targetCurrency
     <div className="px-6 sm:px-10 lg:px-[clamp(24px,7.5vw,120px)]">
       <div
         aria-label="데이터 기준"
-        className="mx-auto mb-6 mt-4 flex max-w-[1140px] flex-wrap items-center gap-x-6 gap-y-2.5 rounded-2xl border border-line bg-forest2 px-5 py-3 text-[11px] text-muted sm:mb-8 sm:px-6"
+        className="mx-auto mb-6 mt-4 flex max-w-[1140px] flex-wrap items-center gap-x-6 gap-y-2.5 rounded-2xl border-2 border-line bg-forest2 px-5 py-3 text-[11px] text-muted sm:mb-8 sm:border sm:px-6"
       >
         <div className="flex items-center border-r border-line pr-6">
           <span className={`mr-1.5 inline-block h-[7px] w-[7px] rounded-full ${pulseClass}`} />

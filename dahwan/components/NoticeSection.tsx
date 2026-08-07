@@ -1,7 +1,7 @@
 export default function NoticeSection() {
   return (
     <section className="px-6 sm:px-10 lg:px-[clamp(24px,7.5vw,120px)]">
-      <div className="mx-auto mb-14 max-w-[1140px] rounded-2xl border border-line bg-forest2 px-6 py-5 sm:mb-20">
+      <div className="mx-auto mb-14 max-w-[1140px] rounded-2xl border-2 border-line bg-forest2 px-6 py-5 sm:mb-20 sm:border">
         <p className="text-[10px] leading-relaxed text-muted">
           <span className="mr-1.5 font-bold text-coral">계산 방식</span>
           기준환율 설정 → 경로별 비용(스프레드·송금·거래·네트워크) 반영 → 최종 수령액 환산, 모든 경로를 같은 출발선에서

@@ -77,7 +77,8 @@ export default function RateAlerts({ alerts, onAdd, onRemove, onDismissTriggered
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="fixed bottom-5 left-5 z-40 grid h-12 w-12 place-items-center rounded-full border border-line bg-paper/90 text-lg shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-md transition hover:border-coral/50 sm:bottom-7 sm:left-7"
+        style={{ bottom: "max(1.25rem, env(safe-area-inset-bottom))" }}
+        className="fixed left-5 z-40 grid h-12 w-12 [transform:translateZ(0)] will-change-transform place-items-center rounded-full border border-line bg-paper/90 text-lg shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-md transition hover:border-coral/50 sm:left-7"
       >
         <span className="relative">
           🔔
