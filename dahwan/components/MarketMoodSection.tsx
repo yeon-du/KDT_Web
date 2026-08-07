@@ -29,6 +29,10 @@ const TREND_META = {
 
 type View = "mood" | "trend";
 
+// Inline section (not a floating click-to-open panel) so the news-sentiment
+// gauge / rate-trend chart sit directly in the page flow, right after
+// DataRail — visible on scroll without an extra click. Two views share one
+// range switcher (실시간/하루/일주일).
 export default function MarketMoodSection({
   summary,
   loading,
@@ -52,8 +56,19 @@ export default function MarketMoodSection({
   const rateTrendMeta = rateTrendDirection ? TREND_META[rateTrendDirection] : null;
 
   return (
-    <section aria-label="시장 동향" className="px-6 sm:px-10 lg:px-[clamp(24px,7.5vw,120px)]">
-      <div className="mx-auto max-w-[1140px] rounded-3xl border-2 border-coral bg-paper p-4 sm:border sm:p-7">
+    // Collapsed from a two-level (outer gutter <section> + inner bordered
+    // <div>) structure to one single element using margin for the gutter
+    // instead of padding-on-a-wrapper. This was a shotgun-debug step: many
+    // rounds of matching padding/border-width/color to the route cards
+    // never closed a real, repeatedly-confirmed (bright-border-diagnostic,
+    // cross-browser) width gap between this panel and the cards below it,
+    // even though the two-level version's math checked out on paper. Rather
+    // than keep guessing at *why* the split structure rendered narrower,
+    // this removes the split entirely so there's nothing left to differ.
+    <section
+      aria-label="시장 동향"
+      className="mx-6 rounded-3xl border-2 border-coral bg-paper p-4 sm:mx-10 sm:border sm:p-7 lg:mx-[clamp(24px,7.5vw,120px)]"
+    >
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold text-coral">Prototype · 실험 기능</p>
@@ -227,7 +242,6 @@ export default function MarketMoodSection({
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
     </section>
   );
 }
