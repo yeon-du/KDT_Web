@@ -175,17 +175,15 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           />
         </div>
 
-        {/* min-h only kicks in at sm+ — on desktop the 3-column grid
-            stretches every card to match its tallest row-mate via CSS
-            grid's default align-items, so a shared min-h keeps bank's 2
-            rows / remittance's 3 rows / USDT's 5 rows from leaving
-            obviously uneven gaps there. On mobile the cards stack in a
-            single column instead of sitting side by side, so forcing that
-            same min-h there was just adding dead space to the shorter
-            cards — every box felt oversized for no reason, when the actual
-            fix mobile needed was to just let each card be exactly as tall
-            as its own content. */}
-        <div className="flex-1 sm:min-h-[190px]">
+        {/* Bank has 2 detail rows, remittance 3, USDT 5 — real content
+            differences, but left unstretched they make the three stacked
+            mobile cards look randomly sized. A shared min-h fixes that on
+            any screen width (not just sm+ desktop, where it also keeps the
+            3-column grid's row-mates level) — sized down from the earlier
+            190px to match the smaller mobile row spacing (my-2, not
+            my-2.5) so it equalizes height without re-padding cards back up
+            to feeling oversized. */}
+        <div className="min-h-[150px] flex-1 sm:min-h-[190px]">
           {route.details.map((d) => (
             <div key={d.label} className="my-2 flex items-center justify-between text-[11px] text-muted sm:my-2.5">
               <span className="flex items-center">
