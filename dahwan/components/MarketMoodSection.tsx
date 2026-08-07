@@ -29,10 +29,6 @@ const TREND_META = {
 
 type View = "mood" | "trend";
 
-// Inline section (not a floating click-to-open panel) so the news-sentiment
-// gauge / rate-trend chart sit directly in the page flow, right after
-// DataRail — visible on scroll without an extra click. Two views share one
-// range switcher (실시간/하루/일주일).
 export default function MarketMoodSection({
   summary,
   loading,
@@ -56,16 +52,8 @@ export default function MarketMoodSection({
   const rateTrendMeta = rateTrendDirection ? TREND_META[rateTrendDirection] : null;
 
   return (
-    <section
-      aria-label="시장 동향"
-      // No bottom margin here — RoutesTabs right below already has its own
-      // generous top padding (py-16/20) as its "new chapter" gap, matching
-      // the single-sided-gap rhythm used everywhere else on the page
-      // (RoutesTabs→NoticeSection, NoticeSection→Footer). Stacking a margin
-      // here on top of that padding was doubling the gap to ~2x its
-      // neighbors.
-      className="mx-auto max-w-[1140px] rounded-3xl border border-line bg-paper p-6 sm:p-7"
-    >
+    <section aria-label="시장 동향" className="px-6 sm:px-10 lg:px-[clamp(24px,7.5vw,120px)]">
+      <div className="mx-auto max-w-[1140px] rounded-3xl border border-line bg-paper p-6 sm:p-7">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold text-coral">Prototype · 실험 기능</p>
@@ -200,14 +188,7 @@ export default function MarketMoodSection({
                 <p className="mt-4 text-[10px] leading-relaxed text-muted">
                   {trend?.source === "real"
                     ? "유럽중앙은행(ECB) 기준 영업일 종가를 무료 공개 API(Frankfurter)로 직접 받아온 실제 과거 환율이에요. 주말·휴장일은 데이터가 없어 건너뛰어요."
-                    : /* The graph's *latest* point really is the live current
-                         rate (usdKrw ÷ target fx, same number DataRail
-                         shows) — only the trailing shape leading up to it is
-                         a simulated walk, since there's no free intraday
-                         history API for this range. The old copy called the
-                         whole thing "모의 데이터" without that distinction,
-                         which read as if even the current number were fake. */
-                      "맨 끝 지점은 지금 이 순간의 실제 환율이에요. 다만 그 앞의 흐름은 무료로 받을 수 있는 실시간·일중 히스토리 데이터가 없어, 현재 시세를 기준으로 만든 모의 흐름이에요."}
+                    : "맨 끝 지점은 지금 이 순간의 실제 환율이에요. 다만 그 앞의 흐름은 무료로 받을 수 있는 실시간·일중 히스토리 데이터가 없어, 현재 시세를 기준으로 만든 모의 흐름이에요."}
                 </p>
               </div>
               <div>
@@ -246,6 +227,7 @@ export default function MarketMoodSection({
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
     </section>
   );
 }
