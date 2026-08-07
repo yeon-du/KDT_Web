@@ -83,7 +83,15 @@ export default function ComparisonSection({
         )}
       </AnimatePresence>
 
-      <div className="grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+      {/* Mobile stacks these in a single column with only the shadow + a
+          1px border (close in color to the card fill itself) marking where
+          one card ends and the next begins — a 12px gap wasn't enough
+          visual breathing room for that boundary to read clearly at a
+          glance, especially scrolling past quickly, so it looked like one
+          continuous block instead of 3 separate cards. Widened on mobile
+          only; sm+/lg (where the grid's own column gutters already help
+          separate cards) keep their original gap. */}
+      <div className="grid gap-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {routes.map((route) => (
           <RouteCard
             key={
