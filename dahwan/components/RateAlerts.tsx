@@ -19,26 +19,18 @@ interface RateAlertsProps {
   defaultCurrency: CurrencyCode;
 }
 
-// Floating bell (fixed, bottom-left — mirrors the "시장 동향" panel on the
-// opposite corner). Alerts are checked client-side against the app's
-// existing live/manual rate on every update; there's no push server behind
-// this static export, so it only fires a browser Notification while this
-// tab stays open. That limitation is stated up front rather than implied.
+// Floating bell (fixed, bottom-left). Alerts are checked client-side against
+// the app's existing live/manual rate on every update; there's no push
+// server behind this static export, so it only fires a browser Notification
+// while this tab stays open. That limitation is stated up front rather than
+// implied.
 export default function RateAlerts({ alerts, onAdd, onRemove, onDismissTriggered, getCurrentRate, defaultCurrency }: RateAlertsProps) {
   const [open, setOpen] = useState(false);
   const [currency, setCurrency] = useState<CurrencyCode>(defaultCurrency);
   const [direction, setDirection] = useState<"above" | "below">("below");
   const [targetRate, setTargetRate] = useState("");
-  // Remembered across visits (same object-wrapped pattern as WelcomeModal's
-  // seen-flag) so a person doesn't have to retype their email for every new
-  // alert. Read lazily in useState's initializer rather than an effect —
-  // there's nothing to "restore over" here since it starts empty either way.
   const [email, setEmail] = useState(() => readLocal<{ email: string }>(EMAIL_KEY, { email: "" }).email);
 
-  // Keep the "새 알림 추가" currency in sync with whichever currency is
-  // selected up in the main comparison — it was only reading defaultCurrency
-  // once at mount, so switching 받는 통화 later left this stuck on whatever
-  // currency was selected when the page first loaded.
   useEffect(() => {
     setCurrency(defaultCurrency);
   }, [defaultCurrency]);
@@ -47,8 +39,6 @@ export default function RateAlerts({ alerts, onAdd, onRemove, onDismissTriggered
   const triggeredCount = alerts.filter((a) => a.triggeredAt).length;
 
   const trimmedEmail = email.trim();
-  // Very loose check — just enough to catch "forgot the @" typos before
-  // wiring it into EmailJS, not full RFC validation.
   const emailLooksValid = trimmedEmail === "" || /\S+@\S+\.\S+/.test(trimmedEmail);
 
   const handleEmailChange = (v: string) => {
@@ -71,23 +61,37 @@ export default function RateAlerts({ alerts, onAdd, onRemove, onDismissTriggered
 
   return (
     <>
+      {/* This is fixed to the viewport, so as the page scrolls it inevitably
+          sits on top of *some* card underneath it — the wide pill version
+          (icon + full "환율 알림 (N)" label) covered enough horizontal space
+          to consistently blot out a card's received-amount figure right as
+          that card scrolled past. Shrinking it to a small icon-only circle
+          cuts the covered area down to roughly a quarter of that, so a card
+          scrolling behind it only loses a small corner instead of its key
+          number. The unread count still shows, just as a small badge instead
+          of inline text. */}
       <motion.button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label="환율 알림 패널 열기"
+        aria-label={`환율 알림 패널 열기${untriggeredCount > 0 ? ` (읽지 않음 ${untriggeredCount}건)` : ""}`}
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
-        className="fixed bottom-5 left-5 z-40 flex items-center gap-2 rounded-full border border-line bg-paper/90 px-4 py-3 text-[12px] font-semibold text-ink shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-md transition hover:border-coral/50 sm:bottom-7 sm:left-7"
+        className="fixed bottom-5 left-5 z-40 grid h-12 w-12 place-items-center rounded-full border border-line bg-paper/90 text-lg shadow-[0_10px_30px_rgba(0,0,0,0.4)] backdrop-blur-md transition hover:border-coral/50 sm:bottom-7 sm:left-7"
       >
         <span className="relative">
           🔔
-          {triggeredCount > 0 && (
-            <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-[#ff8a80]" aria-hidden />
+          {(triggeredCount > 0 || untriggeredCount > 0) && (
+            <span
+              className={`absolute -right-1.5 -top-1.5 grid h-4 min-w-[16px] place-items-center rounded-full px-[3px] text-[9px] font-bold text-forest ${
+                triggeredCount > 0 ? "bg-[#ff8a80]" : "bg-coral"
+              }`}
+              aria-hidden
+            >
+              {untriggeredCount > 0 ? untriggeredCount : ""}
+            </span>
           )}
         </span>
-        환율 알림{untriggeredCount > 0 ? ` (${untriggeredCount})` : ""}
-        <span className="text-muted">{open ? "▾" : "▴"}</span>
       </motion.button>
 
       <AnimatePresence>
@@ -189,11 +193,6 @@ export default function RateAlerts({ alerts, onAdd, onRemove, onDismissTriggered
                   현재 1 {currency} = {formatRate(getCurrentRate(currency))}원
                 </p>
 
-                {/* Optional — leaving this blank keeps the old browser-only
-                    Notification behavior. Filling it in adds an email sent
-                    through EmailJS (client-side, no backend) whenever a new
-                    alert's condition is met. Remembered per-browser so it
-                    doesn't need retyping for every alert. */}
                 <label className="mt-3 block border-t border-line pt-3">
                   <span className="mb-1.5 flex items-center gap-1.5 text-[11px] font-semibold text-muted">
                     ✉ 알림 받을 이메일 <span className="font-normal text-muted/70">(선택)</span>
