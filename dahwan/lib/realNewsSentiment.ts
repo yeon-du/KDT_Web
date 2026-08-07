@@ -37,14 +37,20 @@ const WINDOW_MS: Record<MoodRange, number> = {
 };
 
 const FOREIGN_TERMS = "달러|엔화|엔|유로|파운드|호주달러|캐나다달러|싱가포르달러";
-const FOREIGN_UP = new RegExp(`(${FOREIGN_TERMS})\\s*(강세|급등|상승|고점)`);
-const FOREIGN_DOWN = new RegExp(`(${FOREIGN_TERMS})\\s*(약세|급락|하락|저점)`);
 const KRW_UP = /원화\s*(강세|상승|급등)/;
 const KRW_DOWN = /원화\s*(약세|하락|급락)/;
+const RATE_UP = /환율.{0,6}(상승|급등|올랐|오름세|고점|고공행진)/;
+const RATE_DOWN = /환율.{0,6}(하락|급락|내렸|내림세|저점)/;
+const GENERIC_UP = /(강세|급등|상승세|치솟|고공행진|오름세|연고점|강달러)/;
+const GENERIC_DOWN = /(약세|급락|하락세|곤두박질|추락|내림세|연저점)/;
 
 function classify(headline: string): { stance: NewsStance; score: number } {
-  if (FOREIGN_UP.test(headline) || KRW_DOWN.test(headline)) return { stance: "foreign_bullish", score: 0.5 };
-  if (FOREIGN_DOWN.test(headline) || KRW_UP.test(headline)) return { stance: "krw_bullish", score: -0.5 };
+  if (KRW_DOWN.test(headline)) return { stance: "foreign_bullish", score: 0.5 };
+  if (KRW_UP.test(headline)) return { stance: "krw_bullish", score: -0.5 };
+  if (RATE_UP.test(headline)) return { stance: "foreign_bullish", score: 0.45 };
+  if (RATE_DOWN.test(headline)) return { stance: "krw_bullish", score: -0.45 };
+  if (GENERIC_UP.test(headline)) return { stance: "foreign_bullish", score: 0.3 };
+  if (GENERIC_DOWN.test(headline)) return { stance: "krw_bullish", score: -0.3 };
   return { stance: "neutral", score: 0 };
 }
 

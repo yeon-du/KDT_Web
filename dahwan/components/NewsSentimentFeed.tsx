@@ -9,7 +9,8 @@ function timeAgo(iso: string): string {
   const diffMin = Math.max(0, Math.round((Date.now() - new Date(iso).getTime()) / 60_000));
   if (diffMin < 1) return "방금";
   if (diffMin < 60) return `${diffMin}분 전`;
-  return `${Math.round(diffMin / 60)}시간 전`;
+  if (diffMin < 60 * 24) return `${Math.round(diffMin / 60)}시간 전`;
+  return `${Math.round(diffMin / (60 * 24))}일 전`;
 }
 
 interface NewsSentimentFeedProps {
