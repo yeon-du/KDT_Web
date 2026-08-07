@@ -10,7 +10,6 @@ import RateAlerts from "@/components/RateAlerts";
 import NoticeSection from "@/components/NoticeSection";
 import Footer from "@/components/Footer";
 import WelcomeModal from "@/components/WelcomeModal";
-import WidthDebug from "@/components/WidthDebug";
 import { useRates } from "@/hooks/useRates";
 import { useNewsSentiment } from "@/hooks/useNewsSentiment";
 import { useRateTrend } from "@/hooks/useRateTrend";
@@ -379,7 +378,6 @@ export default function Page() {
     // decoration with its own overflow-hidden, so nothing here depends on
     // main having one.
     <main className="min-h-screen bg-cream">
-      <WidthDebug />
       <WelcomeModal />
       <Navbar />
       <Hero
