@@ -477,8 +477,40 @@ const HEADLINE_POOLS: Record<CurrencyCode, HeadlineSeed[]> = {
   ],
 };
 
-function seededSample<T>(pool: T[], count: number): T[] {
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
+function mulberry32(seed: number) {
+  let s = seed | 0;
+  return function rng() {
+    s = (s + 0x6d2b79f5) | 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function hashSeed(str: string): number {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
+  }
+  return h;
+}
+
+const BUCKET_MS: Record<MoodRange, number> = {
+  live: 5 * 60_000,
+  "1d": 60 * 60_000,
+  "7d": 24 * 60 * 60_000,
+};
+
+function timeBucket(range: MoodRange): number {
+  return Math.floor(Date.now() / BUCKET_MS[range]);
+}
+
+function seededSample<T>(pool: T[], count: number, rng: () => number): T[] {
+  const shuffled = [...pool];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(rng() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
   return shuffled.slice(0, count);
 }
 
@@ -490,17 +522,19 @@ export function generateMockNewsSentiment(range: MoodRange = "live", currency: C
   const config = RANGE_CONFIG[range];
   const pool = HEADLINE_POOLS[currency] ?? HEADLINE_POOLS.USD;
   const count = Math.min(config.count, pool.length);
-  const sampled = seededSample(pool, count).map((item, idx) => ({
+  const bucket = timeBucket(range);
+  const rng = mulberry32(hashSeed(`${currency}|${range}|${bucket}`));
+  const sampled = seededSample(pool, count, rng).map((item, idx) => ({
     ...item,
-    id: `${currency}-${range}-${Date.now()}-${idx}`,
-    score: Math.max(-1, Math.min(1, item.score + (Math.random() * 0.2 - 0.1))),
-    publishedAt: minutesAgo(Math.round((idx / count) * config.spanMinutes) + Math.floor(Math.random() * 20)),
+    id: `${currency}-${range}-${bucket}-${idx}`,
+    score: Math.max(-1, Math.min(1, item.score + (rng() * 0.2 - 0.1))),
+    publishedAt: minutesAgo(Math.round((idx / count) * config.spanMinutes) + Math.floor(rng() * 20)),
   }));
 
   const aggregateScore = Math.round(
     (sampled.reduce((sum, item) => sum + item.score, 0) / sampled.length) * 100
   );
-  const trendDelta = Math.round(Math.random() * 30 - 15);
+  const trendDelta = Math.round(rng() * 30 - 15);
   const trend: NewsSentimentSummary["trend"] = trendDelta > 4 ? "rising" : trendDelta < -4 ? "falling" : "flat";
 
   return {
