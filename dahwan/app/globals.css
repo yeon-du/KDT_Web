@@ -14,6 +14,19 @@ html {
 body {
   background: #0a1220;
   color: #eaf1f4;
+  /* Nothing on the page clips horizontal overflow — <main> deliberately
+     skips overflow-hidden (it would become the nearest scroll container
+     for Navbar's sticky top-0, breaking it) and nothing else fills that
+     gap. If any element anywhere ends up even a few px wider than the
+     viewport (a long unbroken headline, a rounding fudge in one of the
+     -mx/w-[calc(...)] bleed tricks used for the note strips and picker
+     rows, etc.), the whole page becomes horizontally scrollable and a
+     stray sideways swipe shifts *everything* left, cutting off the start
+     of every line of text. Clipping it here is safe unlike on <main>:
+     body is already the outermost scroll container sticky positioning
+     resolves against, so this doesn't change what "nearest scrolling
+     ancestor" means for it. */
+  overflow-x: hidden;
 }
 
 ::selection {
