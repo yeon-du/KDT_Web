@@ -203,11 +203,18 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           ))}
         </div>
 
-        <p className="-mx-4 -mb-4 mt-3 flex min-h-[38px] items-center gap-2 rounded-b-[20px] bg-forest2 px-4 py-2.5 text-[11px] leading-relaxed text-muted sm:-mx-[27px] sm:-mb-[27px] sm:mt-4 sm:min-h-[42px] sm:px-[18px] sm:py-3">
-          <span className="grid h-[15px] w-[15px] shrink-0 place-items-center rounded-full border border-line font-serif text-[10px] text-muted">
+        {/* Note text length varies a lot by route (and by which provider/
+            coin is picked — some of those generated strings run long), so
+            it was wrapping to a different number of lines per card and
+            throwing card heights off again even after the picker-slot and
+            details-block fixes above. line-clamp-2 caps long notes at 2
+            lines (with an ellipsis); min-h guarantees short notes still
+            reserve the same 2-line space instead of collapsing to 1. */}
+        <p className="-mx-4 -mb-4 mt-3 flex min-h-[56px] items-start gap-2 rounded-b-[20px] bg-forest2 px-4 py-2.5 text-[11px] leading-relaxed text-muted sm:-mx-[27px] sm:-mb-[27px] sm:mt-4 sm:min-h-[60px] sm:px-[18px] sm:py-3">
+          <span className="mt-0.5 grid h-[15px] w-[15px] shrink-0 place-items-center rounded-full border border-line font-serif text-[10px] text-muted">
             i
           </span>
-          {route.note}
+          <span className="line-clamp-2">{route.note}</span>
         </p>
       </div>
     </motion.article>
