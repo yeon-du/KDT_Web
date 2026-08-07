@@ -175,7 +175,16 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           />
         </div>
 
-        <div className="min-h-[80px] flex-1">
+        {/* min-h sized for the longest card's content (USDT's 5 detail
+            rows), not just enough for the shortest (bank's 2 rows). On
+            desktop the 3-column grid already stretches every card to match
+            its tallest row-mate via CSS grid's default align-items, but on
+            mobile the cards stack in a single column where nothing forces
+            them to match — without this, scrolling from the short bank
+            card straight into the much taller USDT card felt like the
+            "boxes" were randomly different sizes rather than just holding
+            different amounts of real cost detail. */}
+        <div className="min-h-[190px] flex-1">
           {route.details.map((d) => (
             <div key={d.label} className="my-2.5 flex items-center justify-between text-[11px] text-muted">
               <span className="flex items-center">
