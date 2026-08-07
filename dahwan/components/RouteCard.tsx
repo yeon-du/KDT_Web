@@ -63,17 +63,17 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
       )}
 
       <div
-        className={`flex h-full flex-col overflow-hidden rounded-b-[20px] rounded-t-[18px] p-6 sm:p-[27px] ${
+        className={`flex h-full flex-col overflow-hidden rounded-b-[20px] rounded-t-[18px] p-4 sm:p-[27px] ${
           // isBest's border-t is 4px vs 1px elsewhere — trim 3px off the top
           // padding to compensate so the header stays visually aligned
           // across best/non-best cards instead of sitting 3px lower.
-          isBest ? "pt-[21px] sm:pt-6" : ""
+          isBest ? "pt-[13px] sm:pt-6" : ""
         }`}
       >
         <div className="flex items-center gap-3.5">
           <RouteIcon type={route.key} providerId={providerId} asset={asset} />
           <div>
-            <h3 className="text-[18px] font-semibold tracking-tight text-ink">{route.name}</h3>
+            <h3 className="text-base font-semibold tracking-tight text-ink sm:text-[18px]">{route.name}</h3>
             <p className="mt-1 text-[11px] text-muted">{route.eyebrow}</p>
           </div>
           <strong className="ml-auto font-mono text-[15px] font-bold text-muted">#{rank}</strong>
@@ -140,9 +140,9 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           </div>
         )}
 
-        <div className="border-b border-line py-6">
+        <div className="border-b border-line py-4 sm:py-6">
           <span className="block text-[11px] text-muted">예상 수령액</span>
-          <strong className="my-1.5 block text-[28px] tracking-tight text-ink sm:text-[34px]">
+          <strong className="my-1.5 block text-2xl tracking-tight text-ink sm:text-[34px]">
             <AnimatedNumber value={route.received} format={(v) => formatCurrency(v, targetCurrency)} />
           </strong>
           <small className="block text-[11px] text-muted">
@@ -150,17 +150,17 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           </small>
         </div>
 
-        <div className="-mx-6 grid grid-cols-2 gap-px bg-line sm:-mx-[27px]">
-          <span className="flex justify-between bg-forest2 px-3.5 py-2.5 text-[11px] text-muted">
+        <div className="-mx-4 grid grid-cols-2 gap-px bg-line sm:-mx-[27px]">
+          <span className="flex justify-between bg-forest2 px-3 py-2 text-[11px] text-muted sm:px-3.5 sm:py-2.5">
             예상 시간 <b className="font-semibold text-ink">{route.speed}</b>
           </span>
-          <span className="flex justify-between bg-forest2 px-3.5 py-2.5 text-[11px] text-muted">
+          <span className="flex justify-between bg-forest2 px-3 py-2 text-[11px] text-muted sm:px-3.5 sm:py-2.5">
             경로 위험{" "}
             <b className={`font-semibold ${route.risk === "높음" ? "text-[#ff8a80]" : "text-ink"}`}>{route.risk}</b>
           </span>
         </div>
 
-        <div className="mt-5 flex items-center justify-between text-[12px] text-muted">
+        <div className="mt-4 flex items-center justify-between text-[12px] text-muted sm:mt-5">
           <span>총 예상 비용</span>
           <strong className="text-sm text-ink">
             <AnimatedNumber value={route.totalCost} format={formatKrw} />
@@ -175,18 +175,19 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           />
         </div>
 
-        {/* min-h sized for the longest card's content (USDT's 5 detail
-            rows), not just enough for the shortest (bank's 2 rows). On
-            desktop the 3-column grid already stretches every card to match
-            its tallest row-mate via CSS grid's default align-items, but on
-            mobile the cards stack in a single column where nothing forces
-            them to match — without this, scrolling from the short bank
-            card straight into the much taller USDT card felt like the
-            "boxes" were randomly different sizes rather than just holding
-            different amounts of real cost detail. */}
-        <div className="min-h-[190px] flex-1">
+        {/* min-h only kicks in at sm+ — on desktop the 3-column grid
+            stretches every card to match its tallest row-mate via CSS
+            grid's default align-items, so a shared min-h keeps bank's 2
+            rows / remittance's 3 rows / USDT's 5 rows from leaving
+            obviously uneven gaps there. On mobile the cards stack in a
+            single column instead of sitting side by side, so forcing that
+            same min-h there was just adding dead space to the shorter
+            cards — every box felt oversized for no reason, when the actual
+            fix mobile needed was to just let each card be exactly as tall
+            as its own content. */}
+        <div className="flex-1 sm:min-h-[190px]">
           {route.details.map((d) => (
-            <div key={d.label} className="my-2.5 flex items-center justify-between text-[11px] text-muted">
+            <div key={d.label} className="my-2 flex items-center justify-between text-[11px] text-muted sm:my-2.5">
               <span className="flex items-center">
                 <i className="mr-1.5 inline-block h-[7px] w-[7px] rounded-full" style={{ background: d.color }} />
                 {d.label}
@@ -196,7 +197,7 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
           ))}
         </div>
 
-        <p className="-mx-6 -mb-6 mt-4 flex min-h-[42px] items-center gap-2 rounded-b-[20px] bg-forest2 px-[18px] py-3 text-[11px] leading-relaxed text-muted sm:-mx-[27px] sm:-mb-[27px]">
+        <p className="-mx-4 -mb-4 mt-3 flex min-h-[38px] items-center gap-2 rounded-b-[20px] bg-forest2 px-4 py-2.5 text-[11px] leading-relaxed text-muted sm:-mx-[27px] sm:-mb-[27px] sm:mt-4 sm:min-h-[42px] sm:px-[18px] sm:py-3">
           <span className="grid h-[15px] w-[15px] shrink-0 place-items-center rounded-full border border-line font-serif text-[10px] text-muted">
             i
           </span>
