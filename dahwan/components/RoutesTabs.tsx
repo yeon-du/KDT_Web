@@ -50,7 +50,12 @@ export default function RoutesTabs({
   coinNetworkOptions,
 }: RoutesTabsProps) {
   return (
-    <section id="compare" className="mx-auto max-w-[1440px] px-6 py-10 sm:py-14 lg:px-[clamp(24px,7.5vw,120px)] lg:py-16">
+    // px-6 sm:px-10 lg:px-[clamp(...)] matches the gutter Hero and
+    // DataRail/MarketMoodSection/NoticeSection all use — this was missing
+    // the sm:px-10 step, so at tablet-ish widths this section's cards sat
+    // 16px closer to the screen edge (wider) than every other section on
+    // the page instead of matching their gutter.
+    <section id="compare" className="mx-auto max-w-[1440px] px-6 py-10 sm:px-10 sm:py-14 lg:px-[clamp(24px,7.5vw,120px)] lg:py-16">
       <ComparisonSection
         routes={routes}
         targetCurrency={targetCurrency}
