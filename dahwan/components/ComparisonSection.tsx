@@ -91,7 +91,7 @@ export default function ComparisonSection({
           continuous block instead of 3 separate cards. Widened on mobile
           only; sm+/lg (where the grid's own column gutters already help
           separate cards) keep their original gap. */}
-      <div className="grid gap-6 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+      <div className="grid gap-8 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {routes.map((route) => (
           <RouteCard
             key={

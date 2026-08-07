@@ -14,10 +14,10 @@ const config: Config = {
         green: "#17b98e",
         mint: "#0e2a3a",
         cream: "#0a1220",
-        paper: "#101b2e",
+        paper: "#142643",
         coral: "#2af5c3",
         coral2: "#8ff5e0",
-        line: "#1e2c42",
+        line: "#2c4162",
         muted: "#8291a6",
       },
       fontFamily: {
@@ -26,16 +26,6 @@ const config: Config = {
       },
       boxShadow: {
         card: "0 18px 40px rgba(0,0,0,0.14)",
-        // Was rgba(24,45,39,0.08) — a dark, near-black shadow at 8% opacity
-        // sitting on top of an already-dark page background (#0a1220) is
-        // essentially invisible; shadows read as depth by being *lighter*
-        // than their surroundings, not darker-on-dark. That left each route
-        // card's separation from its neighbors resting almost entirely on a
-        // 12px gap + a 1px border only one shade lighter than the card
-        // itself, which reads as "barely separated" rather than clearly
-        // distinct boxes, especially scrolled past quickly on a phone.
-        // Pure black at higher opacity/spread actually shows up as a real
-        // dark halo against the page background instead of blending in.
         soft: "0 18px 36px rgba(0,0,0,0.45)",
         panel: "0 22px 50px rgba(0,0,0,0.13)",
       },

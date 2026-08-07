@@ -41,7 +41,7 @@ export default function RouteCard({ route, rank, isBest, maxCost, targetCurrency
       layout
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
-      className={`relative rounded-[20px] border bg-paper shadow-soft ${
+      className={`relative rounded-[20px] border-2 bg-paper shadow-soft sm:border ${
         isBest ? "border-t-4 border-t-coral border-x-line border-b-line" : "border-line"
       }`}
     >
