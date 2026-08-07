@@ -62,6 +62,19 @@ export default function NewsSentimentFeed({ items, currency }: NewsSentimentFeed
                   className="ml-5 mt-2 overflow-hidden text-[11px] leading-relaxed text-muted"
                 >
                   {item.reason}
+                  {item.link && (
+                    <>
+                      {" "}
+                      <a
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow"
+                        className="font-semibold text-coral underline underline-offset-2"
+                      >
+                        원문 보기 ↗
+                      </a>
+                    </>
+                  )}
                 </motion.p>
               )}
             </AnimatePresence>

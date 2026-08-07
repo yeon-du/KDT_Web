@@ -54,7 +54,7 @@ export default function MarketMoodSection({
 
   return (
     <PageGutter className="my-0">
-      <section aria-label="시장 동향" className="rounded-3xl border-2 border-coral bg-paper p-4 sm:border sm:p-7">
+      <section aria-label="시장 동향" className="rounded-3xl border-2 border-line bg-paper p-4 sm:border sm:p-7">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-bold text-coral">Prototype · 실험 기능</p>
@@ -125,6 +125,12 @@ export default function MarketMoodSection({
               <div>
                 {summary ? (
                   <>
+                    {summary.source === "real" && (
+                      <span className="mb-2 inline-flex items-center gap-1.5 rounded-full bg-coral/15 px-2.5 py-1 text-[10px] font-semibold text-coral">
+                        <span className="h-1.5 w-1.5 rounded-full bg-coral" aria-hidden />
+                        실제 뉴스 헤드라인 (Google 뉴스)
+                      </span>
+                    )}
                     <MarketMoodGauge
                       score={summary.aggregateScore}
                       label={summary.label}
@@ -145,9 +151,9 @@ export default function MarketMoodSection({
                   <div className="h-24 animate-pulse rounded-xl bg-forest2" />
                 )}
                 <p className="mt-4 text-[10px] leading-relaxed text-muted">
-                  선택한 받는 통화({CURRENCY_SHORT_LABEL[targetCurrency] ?? targetCurrency}) 관련 뉴스 헤드라인의
-                  방향성을 집계한 참고 지표예요. 통화를 바꾸면 헤드라인도 함께 바뀌어요. 투자 조언이 아니며, 실제
-                  데이터 연동 전 프로토타입 단계로 모의 데이터를 사용하고 있습니다.
+                  {summary?.source === "real"
+                    ? <>선택한 받는 통화({CURRENCY_SHORT_LABEL[targetCurrency] ?? targetCurrency}) 관련 실제 뉴스 헤드라인(Google 뉴스)을 가져와 방향성을 집계한 참고 지표예요. 방향 분류는 헤드라인 키워드 기반 자동 분류라 실제 논조와 다를 수 있어요. 투자 조언이 아니에요.</>
+                    : <>선택한 받는 통화({CURRENCY_SHORT_LABEL[targetCurrency] ?? targetCurrency}) 관련 뉴스 헤드라인의 방향성을 집계한 참고 지표예요. 통화를 바꾸면 헤드라인도 함께 바뀌어요. 투자 조언이 아니며, 실제 뉴스를 불러오지 못해 지금은 모의 데이터를 보여드리고 있어요.</>}
                 </p>
               </div>
               <div className="max-h-[280px] overflow-y-auto">

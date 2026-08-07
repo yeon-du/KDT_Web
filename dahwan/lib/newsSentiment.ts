@@ -12,6 +12,7 @@ export interface NewsSentimentItem {
   stance: NewsStance;
   score: number; // -1 (원화 강세) ~ 1 (외화 강세)
   reason: string;
+  link?: string; // original article URL — only set for real (non-mock) items
 }
 
 export type MoodRange = "live" | "1d" | "7d";
@@ -38,6 +39,7 @@ export interface NewsSentimentSummary {
   trend: "rising" | "falling" | "flat";
   trendDelta: number;
   currency: CurrencyCode;
+  source: "real" | "mock";
 }
 
 // Short, natural-sounding Korean label per currency, used in headline
@@ -545,6 +547,7 @@ export function generateMockNewsSentiment(range: MoodRange = "live", currency: C
     trend,
     trendDelta,
     currency,
+    source: "mock",
   };
 }
 
